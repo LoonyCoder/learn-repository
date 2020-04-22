@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+
+person:
+  id: 2
+  name: lucy
+  hobby: [吃饭,睡觉,打豆豆]
+  family: [father,mother]
+  map: {k1: v1,k2: v2}
+  pet: {type: cat,name: 咪咪}
+#以下方式也可以
+#  pet:
+#    type: dog
+#    name: 旺财
