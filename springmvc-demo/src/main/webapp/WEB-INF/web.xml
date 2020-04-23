@@ -1,0 +1,59 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+
+  <!--springmvc提供的针对post请求的编码过滤器-->
+  <filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encoding</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!--配置springmvc请求方式转换过滤器,会检查请求参数中是否有_method，如果有，就按照指定的请求方式进行转换-->
+  <filter>
+    <filter-name>methodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>methodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  <!--初始化时扫描xml文件-->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <!--
+      方式一：带后缀，比如*.action *.do *.aaa
+      方式二：/ 不会拦截.jsp请求，但是会拦截.html等静态资源（静态资源：除了servlet和jsp之外的js/css/png等资源）
+      1.为什么配置成 / 会拦截所有静态资源？
+      答案：因为tomcat容器中还有一个web.xml（父）,项目中也有一个web.xml（子），是一个集成关系
+      在web.xml（父）中有一个处理静态资源的servlet（DefaultServlet）把url-pattern配置成了 /
+      那么在web.xml（子）中配置成 / 就会覆盖掉web.xml（父）中的配置
+      2.为什么 / 不会拦截.jsp
+      答案：因为web.xml（父）中有一个JspServlet，这个servlet中配置的url-pattern是.jsp/.jspx，
+      而我们的web.xml（子）中并没有覆盖这个配置，所以jsp的处理交给了tomcat容器
+
+      解决办法：
+      方式三：/* 拦截所有，包括.jsp请求
+    -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
